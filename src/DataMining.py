@@ -50,26 +50,22 @@ def arrdata(m):
     return tempdata
 
 
-api_key = 'RGAPI-732f6507-1cbd-4822-a5ca-4c44e9dcfa47'
+api_key = 'RGAPI-a7989eef-1d46-4246-955a-890c37e8e38e'
 watcher = LolWatcher(api_key)
+
+lists = ['Ablazeolive','Shrimp Cpt', 'ling xiao lu', 'wechat Hc9999na','tang yuan ya']
 my_region = 'na1'
-me = watcher.summoner.by_name(my_region, 'Skullblue')
-my_matches = watcher.match.matchlist_by_puuid(my_region, me['puuid'])
 
 data = []
 
-# last_match = my_matches[0]
-# match_detail = watcher.match.by_id(my_region, last_match)
-# print(match_detail['info'])
-
-for c in range(10):
-    last_match = my_matches[c]
-    match_detail = watcher.match.by_id(my_region, last_match)
-    if match_detail['info']['gameMode'] == 'CLASSIC':
-        data.append(arrdata(match_detail))
-
-
+for n in lists:
+    sample = watcher.summoner.by_name(my_region, n)
+    sample_match = watcher.match.matchlist_by_puuid(my_region, sample['puuid'])
+    for c in range(20):
+        last_match = sample_match[c]
+        match_detail = watcher.match.by_id(my_region, last_match)
+        if match_detail['info']['gameMode'] == 'CLASSIC':
+            data.append(arrdata(match_detail))
 
 df = pd.DataFrame(data)
-print(df)
-
+df.to_csv('./Data/MatchData.csv', mode='a', index=False, header=True)
