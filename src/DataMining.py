@@ -50,10 +50,10 @@ def arrdata(m):
     return tempdata
 
 
-api_key = 'RGAPI-a7989eef-1d46-4246-955a-890c37e8e38e'
+api_key = 'RGAPI-8d31012b-8113-4178-bb88-01f82b95fc03'
 watcher = LolWatcher(api_key)
 
-lists = ['Ablazeolive','Shrimp Cpt', 'ling xiao lu', 'wechat Hc9999na','tang yuan ya']
+lists = []
 my_region = 'na1'
 
 data = []
@@ -68,4 +68,4 @@ for n in lists:
             data.append(arrdata(match_detail))
 
 df = pd.DataFrame(data)
-df.to_csv('./Data/MatchData.csv', mode='a', index=False, header=True)
+df.to_csv('./Data/MatchData.csv', mode='a', index=False, header=False)
