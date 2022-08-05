@@ -1,6 +1,6 @@
 import pandas as pd
 from riotwatcher import LolWatcher, ApiError
-
+import Getnicknames as gn
 
 def arrdata(m):
     tempdata = {}
@@ -50,22 +50,34 @@ def arrdata(m):
     return tempdata
 
 
-api_key = 'RGAPI-8d31012b-8113-4178-bb88-01f82b95fc03'
-watcher = LolWatcher(api_key)
+def get_matchdata():
+    api_key = 'RGAPI-17574640-6972-4cd1-af98-0bdda3d1d88c'
+    watcher = LolWatcher(api_key)
 
-lists = []
-my_region = 'na1'
+    nn = pd.read_csv("./Data/Nicknames.csv")
+    lists = list(nn["Nickname"])
+    my_region = 'na1'
 
-data = []
+    data = []
 
-for n in lists:
-    sample = watcher.summoner.by_name(my_region, n)
-    sample_match = watcher.match.matchlist_by_puuid(my_region, sample['puuid'])
-    for c in range(20):
-        last_match = sample_match[c]
-        match_detail = watcher.match.by_id(my_region, last_match)
-        if match_detail['info']['gameMode'] == 'CLASSIC':
-            data.append(arrdata(match_detail))
+    for n in lists:
+        sample = watcher.summoner.by_name(my_region, n)
+        sample_match = watcher.match.matchlist_by_puuid(my_region, sample['puuid'])
+        if len(sample_match) != 0:
+            for c in range(len(sample_match)):
+                last_match = sample_match[c]
+                match_detail = watcher.match.by_id(my_region, last_match)
+                if match_detail['info']['gameMode'] == 'CLASSIC':
+                    data.append(arrdata(match_detail))
 
-df = pd.DataFrame(data)
-df.to_csv('./Data/MatchData.csv', mode='a', index=False, header=False)
+    df = pd.DataFrame(data)
+    df.to_csv('./Data/MatchData.csv', mode='a', index=False, header=False)
+
+
+def datamining():
+    links = ["https://www.op.gg/leaderboards/tier?region=na&page=2"]
+    for l in links:
+        gn.get_nicknames(l)
+        get_matchdata()
+
+datamining()
