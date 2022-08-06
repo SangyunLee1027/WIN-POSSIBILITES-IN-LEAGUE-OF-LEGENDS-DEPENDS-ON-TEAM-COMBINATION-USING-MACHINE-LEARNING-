@@ -51,7 +51,7 @@ def arrdata(m):
 
 
 def get_matchdata():
-    api_key = 'RGAPI-17574640-6972-4cd1-af98-0bdda3d1d88c'
+    api_key = 'RGAPI-b37caf60-fef9-4348-9245-e589ebbdf3e6'
     watcher = LolWatcher(api_key)
 
     nn = pd.read_csv("./Data/Nicknames.csv")
@@ -66,16 +66,19 @@ def get_matchdata():
         if len(sample_match) != 0:
             for c in range(len(sample_match)):
                 last_match = sample_match[c]
-                match_detail = watcher.match.by_id(my_region, last_match)
-                if match_detail['info']['gameMode'] == 'CLASSIC':
-                    data.append(arrdata(match_detail))
+                try:
+                    match_detail = watcher.match.by_id(my_region, last_match)
+                    if match_detail['info']['gameMode'] == 'CLASSIC':
+                        data.append(arrdata(match_detail))
+                except:
+                    pass
 
     df = pd.DataFrame(data)
     df.to_csv('./Data/MatchData.csv', mode='a', index=False, header=False)
 
 
 def datamining():
-    links = ["https://www.op.gg/leaderboards/tier?region=na&page=2"]
+    links = ["https://www.op.gg/leaderboards/tier?region=na&page=3"]
     for l in links:
         gn.get_nicknames(l)
         get_matchdata()

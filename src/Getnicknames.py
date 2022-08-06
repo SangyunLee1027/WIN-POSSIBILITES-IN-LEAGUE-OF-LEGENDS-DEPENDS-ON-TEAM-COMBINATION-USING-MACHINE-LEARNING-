@@ -14,7 +14,7 @@ def get_nicknames(link):
 
     temp = soup.find("tr", attrs={"class":"css-1kk0pwf e1g3wlsd9"})
     nicknames.append(temp.find("strong", attrs = {"summoner-name"}).text)
-    for i in range(20):
+    for i in range(50):
         temp = temp.find_next_sibling("tr")
         nicknames.append(temp.find("strong", attrs = {"summoner-name"}).text)
     df = pd.DataFrame(nicknames)
